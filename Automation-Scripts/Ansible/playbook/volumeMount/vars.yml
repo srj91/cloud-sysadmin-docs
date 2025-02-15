@@ -1,0 +1,13 @@
+partition_label: "/ppronew"
+mount_point: "/ppronew"
+owner: "admin"
+group: "ppronew"
+file_mode: "0777"
+fstype: "ext4"
+partition_number: "1"
+directory_mode: "0755"
+src_directory: "/ppro/"
+dest_directory: "/ppronew/"
+screen_session_name: "rsyncInitial_job"
+log_file_path: "/var/log"
+wait_time: 30

@@ -1,0 +1,97 @@
+####################################################################
+# Author: Suraj Chopade
+# This script is used to install the NDR sensor.
+#
+# Usage:
+#   ansible-playbook -I hosts.ini mountEbsVolume.yaml
+#
+# Make sure to run this script with appropriate permissions.
+####################################################################
+---
+- name: Manage disk and partition
+  hosts: servers
+  become: yes
+  vars:
+    partition_label: "/ppronew"
+    mount_point: "/ppronew"
+    owner: "admin"
+    group: "ppro"
+    file_mode: "0777"
+    fstype: "xfs"
+
+  tasks:
+
+    - name: Find the first non-partitioned disk
+      shell: |
+        for disk in $(lsblk -dno NAME); do
+          if [ "$(lsblk -no TYPE /dev/$disk)" = "disk" ]; then
+            if ! lsblk -no NAME /dev/$disk | grep -q "^${disk}[0-9]"; then
+              if [ -z "$(blkid /dev/$disk)" ]; then
+                echo "/dev/$disk"
+                break
+              fi
+            fi
+          fi
+        done
+      register: unpartitioned_disk
+      changed_when: false
+
+    - name: Fail if no non-partitioned disk is found
+      fail:
+        msg: "No non-partitioned disk found."
+      when: unpartitioned_disk.stdout == ""
+
+    - name: Create a partition on the disk
+      parted:
+        device: "{{ unpartitioned_disk.stdout }}"
+        number: 1
+        part_type: primary
+        state: present
+        align: optimal
+
+    - name: Format the partition with {{ fstype | upper }} filesystem
+      filesystem:
+        fstype: "{{ fstype }}"
+        dev: "{{ unpartitioned_disk.stdout }}1"
+
+    - name: Label the partition
+      command: "xfs_admin -L {{ partition_label }} {{ unpartitioned_disk.stdout }}1"
+      args:
+        creates: "/dev/disk/by-label/{{ partition_label }}"
+
+    - name: Create mount point
+      file:
+        path: "{{ mount_point }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Mount the partition
+      mount:
+        path: "{{ mount_point }}"
+        src: "LABEL={{ partition_label }}"
+        fstype: "{{ fstype }}"
+        opts: "defaults,noatime,nodiratime"
+        state: mounted
+
+    - name: Ensure fstab entry exists
+      mount:
+        path: "{{ mount_point }}"
+        src: "LABEL={{ partition_label }}"
+        fstype: "{{ fstype }}"
+        opts: defaults
+        state: present
+
+    - name: Change ownership of {{ mount_point }}
+      file:
+        path: "{{ mount_point }}"
+        owner: "{{ owner }}"
+        group: "{{ group }}"
+        recurse: yes
+
+    - name: Change permissions of {{ mount_point }}
+      file:
+        path: "{{ mount_point }}"
+        mode: "{{ file_mode }}"
+        recurse: yes

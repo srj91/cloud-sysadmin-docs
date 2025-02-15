@@ -17,12 +17,12 @@ variable "bucket_name" {
 variable "access_key" {
   description = "The AWS access key"
   type        = string
-  default     = "AKIA6RTMVHBVB4D2XBOP"
+  default     = ""
 }
 
 variable "secret_key" {
   description = "The AWS secret key"
   type        = string
-  default     = "aCXtPL+au4d9jg+l1KQ5ZkI9h987BoEdzV+qqUsU"  
+  default     = ""  
 }
 

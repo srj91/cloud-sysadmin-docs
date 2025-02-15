@@ -7,13 +7,13 @@ variable "aws_region" {
 variable "access_key" {
   description = "The access key for API operations"
   type        = string
-  default     = "AKIA6RTMVHBVB4D2XBOP"
+  default     = ""
 }
 
 variable "secret_key" {
   description = "The secret key for API operations"
   type        = string
-  default     = "aCXtPL+au4d9jg+l1KQ5ZkI9h987BoEdzV+qqUsU"
+  default     = ""
 }
 
 variable "user_name" {

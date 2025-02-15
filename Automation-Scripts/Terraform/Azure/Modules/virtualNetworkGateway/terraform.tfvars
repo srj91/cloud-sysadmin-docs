@@ -1,0 +1,9 @@
+azure_region           = "westus"
+customer_name          = "facebook"
+vnet_address_space     = "10.0.0.0/16"
+snet_address_prefix    = "10.0.0.32/27"
+gw_snet_address_prefix = "10.0.0.0/27"
+resource_group_name    = "rg-eastus-prd-apprise-facebook"
+lng_ip_address         = "203.0.113.1"
+lng_address_prefixes   = ["192.168.10.10/32", "192.168.32.0/24"]
+shared_key             = "mysharedkey123"

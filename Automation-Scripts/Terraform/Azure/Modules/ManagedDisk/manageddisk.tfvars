@@ -1,0 +1,8 @@
+customer_name        = "sample"
+azure_region         = "eastus2"
+resource_group_name  = "demo"
+storage_account_type = "Premium_LRS"
+disk_size_gb         = "128"
+vm_id                = "/subscriptions/c36a852d-d009-48ae-9159-175e1aca83dc/resourceGroups/demo/providers/Microsoft.Compute/virtualMachines/awebui06test"
+disk_lun             = "1"
+disk_caching         = "ReadWrite"

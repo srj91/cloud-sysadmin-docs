@@ -1,0 +1,39 @@
+---
+- hosts: win
+  gather_facts: false
+  name: OpenEdge 12.2.12 Silent Installation
+  tasks:
+
+#--- Copy Progress OE zip to Client server ---#
+  - name: Copy PROGRESS_OE_12.2.12_WIN_64.zip to remote server
+    win_copy:
+      src: PROGRESS_OE_12.2.12_WIN_64.zip 
+      dest: C:\\Temp\\PROGRESS_OE_12.2.12_WIN_64.zip
+
+#--- Unzip the Openedge package ---#
+  - name: Extract PROGRESS_OE_12.2.12_WIN_64.zip
+    win_unzip:
+      src: C:\\Temp\\PROGRESS_OE_12.2.12_WIN_64.zip
+      dest: C:\\Temp\\
+      overwrite: yes
+
+#--- Copy Progress_12.2 Zip ---#
+  - name: copy Progress_12.2 Zip
+    win_copy:
+      src: Progress_12.2.zip
+      dest: C:\\Temp\\Progress_12.2.zip
+
+#--- unzip the Progress 12.2 ---#
+  - name: Extract Progress_12.2 Zip
+    win_unzip:
+      src: C:\\Temp\\Progress_12.2.zip
+      dest: C:\\Temp\\
+      overwrite: yes
+
+#--- Run Progress SilentInstall batch ---#
+  - name: Install Progress_12.2 Silently
+    win_command: C:\\Temp\\Progress_12.2\\silentinstall.bat
+
+
+
+

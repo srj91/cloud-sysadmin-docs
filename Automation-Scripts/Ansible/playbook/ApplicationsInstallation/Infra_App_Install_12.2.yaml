@@ -1,0 +1,121 @@
+# This Playbook install the required Applications for a Server utilization and other activities
+# Chrome, Notepad++, TreeSize, AzCopy, Storage Explorer, 7-Zip
+#
+---
+- hosts: win
+  gather_facts: false
+  name: Infrastructure Related Applications Installation
+  tasks:
+
+#--- Chrome Install ---#  
+
+  - name: copy the bundle.zip
+    win_copy:
+       src: GoogleChromeEnterpriseBundle64.zip
+       dest: C:\\temp\\
+
+  - name: extract the bundle
+    win_unzip:
+       src: C:\\temp\\GoogleChromeEnterpriseBundle64.zip
+       dest: C:\\temp\\Chrome
+
+  - name: install the Chrome
+    win_package:
+       path: C:\\temp\\Chrome\\Installers\\GoogleChromeStandaloneEnterprise64.msi
+       wait: yes
+       state: present
+
+#--- Notepad++ install ---#
+
+  - name: Set Notepad++ Version
+    set_fact:
+       version: 7.5.4
+
+  - name: Installing Notepad++
+    win_package:
+       path: 'https://notepad-plus-plus.org/repository/7.x/{{ version }}/npp.{{ version }}.Installer.x64.exe'
+       arguments: '/S'
+       creates_version: '7.54'
+       creates_path: 'C:\Program Files\Notepad++\notepad++.exe'
+       state: present
+
+#--- Treesize Install ---#
+
+  - name: Download TreeSize Free installer
+    win_get_url:
+       url: "https://www.jam-software.com/treesize_free/TreeSizeFreeSetup.exe"
+       dest: "C:\\Temp\\TreeSizeFreeSetup.exe"
+
+  - name: Install the TreesizeFree
+    win_command: C:\Temp\TreesizeFreeSetup.exe /VERYSILENT /NORESTART
+
+#--- Azcopy Install ---#
+  
+  - name: Copy AzCopy to Server
+    win_copy:
+       src: AzCopy.zip
+       dest: C:\\Temp\\AzCopy.zip
+  
+  - name: unzip the AzCopy
+    win_unzip: 
+       src: C:\\Temp\\AzCopy.zip
+       dest: C:\\Temp\\AzCopy\\
+
+  - name: Install the AzCopy
+    win_command: MsiExec.exe /i C:\Temp\AzCopy\AzCopy.msi /qn
+
+#--- Storage Explorer Install---#
+
+  - name: Download the Storage Explorer
+    win_get_url: 
+       url: "https://go.microsoft.com/fwlink/?LinkId=708343"
+       dest: "C:\\Temp\\StorageExplorer.exe"
+  
+  - name: install Storage Explorer
+    win_command: C:\Temp\StorageExplorer.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /ALLUSERS
+
+#--- 7-Zip Install ---#
+
+  - name: Download the 7-Zip package
+    win_get_url:
+       url: https://www.7-zip.org/a/7z2201-x64.msi
+       dest: C:\Temp\A7z.msi
+
+  - name: Ensure 7-Zip is installed via win_package
+    win_package:
+       path: C:\Temp\A7z.msi
+       state: present
+
+#--- Copy jdk-11.0.12 ---#
+
+  - name: Copy JDK executable
+    win_copy:
+       src: JDK11U-jdk_x64_windows_hotspot_11.0.12_7.msi.zip
+       dest: C:\\Temp\\JDK11U-jdk_x64_windows_hotspot_11.0.12_7.msi.zip
+  
+  - name: unzip the Java zip
+    win_unzip:
+       src: C:\\Temp\\JDK11U-jdk_x64_windows_hotspot_11.0.12_7.msi.zip
+       dest: C:\\Temp\\JDK11U-jdk_x64_windows_hotspot_11.0.12_7.msi
+
+#--- Copy the java installation bat file and run Install ---#
+  - name: copy java installer batch
+    win_copy: 
+       src: silentinstallJDK.bat
+       dest: C:\\Temp\\silentinstallJDK.bat
+
+  - name: Run JDK Silent Install
+    win_command: cmd.exe /c C:\\Temp\\silentinstallJDK.bat
+    
+
+  
+
+  
+
+
+  
+
+
+
+  
+

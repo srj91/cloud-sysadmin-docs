@@ -1,0 +1,76 @@
+# This script creates the Standard Directory Structure folders for Apprise VEsrions
+# 8.3.0
+# 8.3.1
+# Modify the script as per the Appliation Vesrion 
+---
+- name: Create Folder Structure
+  hosts: win
+  gather_facts: false
+
+  vars:
+    subfolders:
+# Apprise Folder structure
+      - E:\Apprise\8.3.1\Conv
+      - E:\Apprise\8.3.1\Live
+      - E:\Apprise\8.3.1\Test
+      - E:\Apprise\AppCenter
+
+# Create DB folders
+      - E:\AppriseDB\8.3.1\Conv
+      - E:\AppriseDB\8.3.1\Live
+      - E:\AppriseDB\8.3.1\Test
+      - E:\AppriseDB\AppCenter\AppCenter
+      - E:\AppriseDB\AppCenter\Framework
+
+# Create Java and FileSync Folder
+      - E:\JAVA\jdk-11.0.12
+      - E:\AzureFileShare\8.3.1\Live
+      - E:\AzureFileShare\8.3.1\Test
+
+# Create Progress Related Folders
+      - E:\Progress\OpenEdge12.2
+      - E:\Progress\oemgmt12.2
+      - E:\OpenEdge12.2\WRK
+      - E:\OpenEdge12.2\wrk_oemgmt
+      - E:\PASOE
+
+# Automation related folders
+      - E:\AutomationScripts\Monitoring
+      - E:\AutomationScripts\Backup
+      - E:\AutomationScripts\Cleanup
+      - E:\CloudPrint\Apprise\Printing\Fast
+
+# Logs folder structure creation
+      - E:\Logs\BulkExport_CustomerName831Live
+      - E:\Logs\BulkExport_CustomerName831Test
+      - E:\Logs\PerformanceMonitor\Live
+      - E:\Logs\PerformanceMonitor\Test
+      - E:\Logs\DWLogs
+      - E:\Logs\SchedulingAssistant\Conv
+      - E:\Logs\SchedulingAssistant\Live
+      - E:\Logs\SchedulingAssistant\Test
+      - E:\Logs\SchedulingAssistant\FastSA\Live
+      - E:\Logs\SchedulingAssistant\FastSA\Test
+      - E:\Logs\SeriLogs\Archive_Logs
+      - E:\Logs\SeriLogs\NC
+      - E:\Logs\SeriLogs\SSM
+      - E:\Logs\SeriLogs\Archive_Logs\NC_Logs
+      - E:\Logs\Serilogs\Archive_Logs\SSM_Logs
+
+# Temp Folder for Temprory files
+      - E:\Temp\Projects
+      - E:\Temp\Reporting\rpt
+      - E:\Temp\AppCenter
+      - E:\Temp\Live
+      - E:\Temp\Conv
+      - E:\Temp\Test
+      - E:\Temp\AppriseInstall
+
+  tasks:
+    - name: Create Standard Apprise Folder Structure
+      win_file:
+          path: "{{ item }}"
+          state: directory
+      loop: "{{ subfolders }}"
+  
+  

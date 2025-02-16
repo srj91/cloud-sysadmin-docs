@@ -5,10 +5,10 @@ $processName = "SchedulingAssistantService"  # Replace with the actual process n
 $threshold = 9500
 $smtpServer = "smtp.office365.com"  # Replace with your SMTP server
 $smtpPort = 587  # Common SMTP port for TLS; change if your server uses a different port
-$smtpFrom = "noreply-apprise@aptean.com"  # Replace with the sender's email
-$smtpTo = "suraj.chopade@aptean.com"  # Replace with the recipient's email
+$smtpFrom = "noreply@example.com"  # Replace with the sender's email
+$smtpTo = "suraj.chopade@example.com"  # Replace with the recipient's email
 $emailSubject = "CRITICAL - Handle Count Alert"
-$smtpCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "noreply-apprise@aptean.com", (ConvertTo-SecureString "Winter@123" -AsPlainText -Force)
+$smtpCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "noreply@example.com", (ConvertTo-SecureString "password" -AsPlainText -Force)
 
 # Get the handle counts for all instances of the process
 $processes = Get-Process -Name $processName -ErrorAction SilentlyContinue

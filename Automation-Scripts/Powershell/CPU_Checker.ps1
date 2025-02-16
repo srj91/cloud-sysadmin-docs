@@ -39,11 +39,11 @@ $Measurements = $List | Measure-Object -Minimum -Average -Maximum
 If ($Measurements.Average -gt 90)
 {
 #$output = "Critical: MHW01 CPU is 90%..... Please look into it "
-$userName = 'noreply-apprise@aptean.com'
-$password = 'Winter@123'
+$userName = 'noreply@example.com'
+$password = 'password'
 [SecureString]$securepassword = $password | ConvertTo-SecureString -AsPlainText -Force 
 
 $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $securepassword
-Send-MailMessage -BodyAsHtml -SmtpServer smtp.office365.com -Port 587 -UseSsl -From noreply-apprise@aptean.com -To ApteanSRE-Jedi@aptean.com  -Subject 'CRITICAL - MHW01 Running with High CPU' -Body $body -Credential $credential
+Send-MailMessage -BodyAsHtml -SmtpServer smtp.office365.com -Port 587 -UseSsl -From noreply@example.com -To ApteanSRE-Jedi@aptean.com  -Subject 'CRITICAL - MHW01 Running with High CPU' -Body $body -Credential $credential
 
 }

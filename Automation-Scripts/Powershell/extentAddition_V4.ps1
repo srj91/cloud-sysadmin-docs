@@ -145,11 +145,11 @@ function Send-Email {
     # After the new extents are added, send an email notification
     $smtpServer = "smtp.office365.com"  # Replace with your SMTP server
     $smtpPort = 587  # Replace with your SMTP port
-    $smtpUser = "noreply-apprise@aptean.com"  # Replace with your SMTP username
-    $smtpPassword = ConvertTo-SecureString "Winter@123" -AsPlainText -Force  # Replace with your SMTP password
+    $smtpUser = "noreply@example.com"  # Replace with your SMTP username
+    $smtpPassword = ConvertTo-SecureString "password" -AsPlainText -Force  # Replace with your SMTP password
     $smtpCredential = New-Object System.Management.Automation.PSCredential($smtpUser, $smtpPassword)
 
-    $from = "noreply-apprise@aptean.com"  # Replace with your "from" email address
+    $from = "noreply@example.com"  # Replace with your "from" email address
     $to = "ApteanOperations-AppriseSRE@aptean.com"  # Replace with your "to" email address
     $subject = "New extents added to database $databaseName on server $env:COMPUTERNAME"
 

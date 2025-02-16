@@ -1,10 +1,10 @@
 # Define email parameters
 $recipientEmail = "suraj.chopade@aptean.com"
-$senderEmail = "noreply-apprise@aptean.com"
+$senderEmail = "noreply@example.com"
 $smtpServer = "smtp.office365.com"
 $smtpPort = 587
-$smtpUsername = "noreply-apprise@aptean.com"
-$smtpPassword = "Winter@123"
+$smtpUsername = "noreply@example.com"
+$smtpPassword = "password"
 
 # Get the current date and time 15 minutes ago
 $startTime = (Get-Date).AddMinutes(-15)

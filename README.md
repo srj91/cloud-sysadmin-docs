@@ -1,6 +1,6 @@
 # cloud-sysadmin-docs
 
-# Cloud & System Administration Docs  
+# Cloud & System Administration Docs and Automation scripts
 This repository contains my personal documentation, guides, and automation scripts related to cloud and system administration.  
 
 ## 📂 Categories  

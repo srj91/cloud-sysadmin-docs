@@ -1,0 +1,68 @@
+
+************ Rescuing VM from Dracut mode after kernel upgrade ***************
+
+1- Create a rescue disk Attach and mount the disk to rescue VM. Chroot and repair fstab and grub menu:
+- Mounting and chroot:
+mount /dev/mapper/centos-root /rescue
+mount /dev/sdc1 /rescue/boot
+cd /rescue
+mount -t proc proc proc
+mount -t sysfs sys sys/
+mount -o bind /dev dev/
+mount -o bind /dev/pts dev/pts/
+mount -o bind /run run/
+chroot .
+
+- Comment out additional disks in fstab (if you have any datadisk entry or fileshare entry)
+- Take a backup of /etc/default/grub then remove all its contents and replace with the below:
+
+GRUB_TIMEOUT=10 
+GRUB_TIMEOUT_STYLE=countdown
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL="serial console"
+GRUB_CMDLINE_LINUX="console=tty1 console=ttyS0,115200n8 earlyprintk=ttyS0,115200 rootdelay=300 net.ifnames=0 scsi_mod.use_blk_mq=y"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+
+Take backup of all repositories
+- Take a backup copy of /boot/grub2/grub.cfg and regenerate the file 
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+- Unmount and detach:
+exit
+cd /
+umount /rescue/run
+umount /rescue/proc/
+umount /rescue/dev/pts
+umount /rescue/dev
+umount /rescue/sys
+umount /rescue/boot
+umount  -l /rescue
+
+2- Swap the disk back and boot up the old (working) kernel
+
+3- Repair/Rebuild the yum database    
+yum-complete-transaction --cleanup-only    
+tar cjf /tmp/rpm_db.tar.bz2 /var/lib/{rpm,yum}
+​yum check &> /tmp/yumcheck
+
+grep "duplicate" /tmp/yumcheck | awk '{ print $NF }' | egrep -v "\:" > /tmp/duplicaterpms
+grep "duplicate" /tmp/yumcheck | awk '{ print $NF }' | egrep ":" | awk -F':' '{ print $NF }' >> /tmp/duplicaterpms
+for i in $(cat /tmp/duplicaterpms); do rpm -e --justdb --nodeps $i; done
+yum update
+yum-config-manager | grep "==" ## check enabled repos
+
+- Disable all other repos and then only enable base, updates, and extras (can be done in 2 ways) as per the below:
+sed -i 's/enabled=1/enabled=0/g' CentOS-Base.repo
+vim CentOS-Base.repo ( and enable base, updates, extras and save the file)
+yum repolist
+run yum list kernel
+
+4- Complete the broken system update and rgenerate the initramfs image for this kernel post successful update.
+yum update 
+dracut -v -f  initramfs-3.10.0-1127.19.1.el7.x86_64.img  3.10.0-1127.19.1.el7.x86_64
+reboot the system from the most recent kernel (not the centosplus one)
+
+reenable mysql and docker repos

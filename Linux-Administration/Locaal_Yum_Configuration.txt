@@ -1,0 +1,21 @@
+***************** Creating local repository *******************
+
+Mount your ISO on /dev/sr0 or on custome directory
+# mount -t iso9660 -o loop /home/dan/Centos-7-x86_x64-DVD.iso /mnt/iso/
+# cd /mnt/iso
+# mkdir /local-repo
+# cp -R /mnt/iso/Packages/ /local-repo/
+# cd /local-repo/
+
+Intall following packages for building yum repo database
+
+# rpm -ivh Packages/deltarpm-3.6-3.el7.x86_64.rpm
+# rpm -ivh Packages/python-deltarpm-3.6-3.el7.x86_64.rpm
+# rpm -ivh Packages/createrepo-0.9.9-28.el7.noarch.rpm
+# vim /etc/yum.repos.d/local.repo
+# createrepo -v /local-repo
+
+Refreshing yum database and listing the repositories
+
+# yum clean all
+# yum repolist

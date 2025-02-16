@@ -1,0 +1,159 @@
+
+
+[root@DevOpsPrimaryServer ~]# df -hT
+Filesystem     Type      Size  Used Avail Use% Mounted on
+devtmpfs       devtmpfs  7.9G     0  7.9G   0% /dev
+tmpfs          tmpfs     7.9G     0  7.9G   0% /dev/shm
+tmpfs          tmpfs     7.9G  9.0M  7.9G   1% /run
+tmpfs          tmpfs     7.9G     0  7.9G   0% /sys/fs/cgroup
+/dev/sda2      xfs        30G  1.4G   29G   5% /
+/dev/sda1      xfs       497M   64M  433M  13% /boot
+/dev/sdb1      ext4       32G   49M   30G   1% /mnt/resource
+tmpfs          tmpfs     1.6G     0  1.6G   0% /run/user/1000
+
+
+[root@DevOpsPrimaryServer ~]# fdisk -l
+
+Disk /dev/sda: 274.9 GB, 274877906944 bytes, 536870912 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk label type: dos
+Disk identifier: 0x000a8b4c
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048     1026047      512000   83  Linux
+/dev/sda2         1026048    62914559    30944256   83  Linux
+
+Disk /dev/sdb: 34.4 GB, 34359738368 bytes, 67108864 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk label type: dos
+Disk identifier: 0x53764098
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1             128    67106815    33553344   83  Linux
+
+
+[root@DevOpsPrimaryServer ~]# fdisk /dev/sda
+
+The device presents a logical sector size that is smaller than
+the physical sector size. Aligning to a physical sector (or optimal
+I/O) size boundary is recommended, or performance may be impacted.
+Welcome to fdisk (util-linux 2.23.2).
+
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+
+Command (m for help): p
+
+Disk /dev/sda: 274.9 GB, 274877906944 bytes, 536870912 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk label type: dos
+Disk identifier: 0x000a8b4c
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048     1026047      512000   83  Linux
+/dev/sda2         1026048    62914559    30944256   83  Linux
+
+Command (m for help): u
+Changing display/entry units to cylinders (DEPRECATED!).
+
+Command (m for help): p
+
+Disk /dev/sda: 274.9 GB, 274877906944 bytes, 536870912 sectors
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk label type: dos
+Disk identifier: 0x000a8b4c
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          64      512000   83  Linux
+/dev/sda2              64        3917    30944256   83  Linuxb
+
+Command (m for help): d
+Partition number (1,2, default 2): 2
+Partition 2 is deleted
+
+Command (m for help): n
+Partition type:
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended
+Select (default p): p
+Partition number (2-4, default 2):
+First cylinder (64-33418, default 64):
+Using default value 64
+Last cylinder, +cylinders or +size{K,M,G} (64-33418, default 33418):
+Using default value 33418
+Partition 2 of type Linux and of size 255.5 GiB is set
+
+Command (m for help): a
+Partition number (1,2, default 2): 2
+
+Command (m for help): p
+
+Disk /dev/sda: 274.9 GB, 274877906944 bytes, 536870912 sectors
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk label type: dos
+Disk identifier: 0x000a8b4c
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          64      512000   83  Linux
+/dev/sda2   *          64       33418   267917061   83  Linux
+
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+
+WARNING: Re-reading the partition table failed with error 16: Device or resource busy.
+The kernel still uses the old table. The new table will be used at
+the next reboot or after you run partprobe(8) or kpartx(8)
+Syncing disks.
+[root@DevOpsPrimaryServer ~]# reboot
+
+
+
+[root@DevOpsPrimaryServer ~]# df -hT
+Filesystem     Type      Size  Used Avail Use% Mounted on
+devtmpfs       devtmpfs  7.9G     0  7.9G   0% /dev
+tmpfs          tmpfs     7.9G     0  7.9G   0% /dev/shm
+tmpfs          tmpfs     7.9G  9.0M  7.9G   1% /run
+tmpfs          tmpfs     7.9G     0  7.9G   0% /sys/fs/cgroup
+/dev/sda2      xfs        30G  1.4G   29G   5% /
+/dev/sda1      xfs       497M   64M  433M  13% /boot
+/dev/sdb1      ext4       32G   49M   30G   1% /mnt/resource
+tmpfs          tmpfs     1.6G     0  1.6G   0% /run/user/1000
+
+[root@DevOpsPrimaryServer ~]# xfs_growfs -d /dev/sda2
+meta-data=/dev/sda2              isize=512    agcount=4, agsize=1934016 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0 spinodes=0
+data     =                       bsize=4096   blocks=7736064, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal               bsize=4096   blocks=3777, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+data blocks changed from 7736064 to 66979265
+
+[root@DevOpsPrimaryServer ~]# df -hT
+Filesystem     Type      Size  Used Avail Use% Mounted on
+devtmpfs       devtmpfs  7.9G     0  7.9G   0% /dev
+tmpfs          tmpfs     7.9G     0  7.9G   0% /dev/shm
+tmpfs          tmpfs     7.9G  9.0M  7.9G   1% /run
+tmpfs          tmpfs     7.9G     0  7.9G   0% /sys/fs/cgroup
+/dev/sda2      xfs       256G  1.4G  255G   1% /
+/dev/sda1      xfs       497M   64M  433M  13% /boot
+/dev/sdb1      ext4       32G   49M   30G   1% /mnt/resource
+tmpfs          tmpfs     1.6G     0  1.6G   0% /run/user/1000
+
+Imp Links:-
+https://docs.microsoft.com/en-us/azure/virtual-machines/linux/resize-os-disk-gpt-partition

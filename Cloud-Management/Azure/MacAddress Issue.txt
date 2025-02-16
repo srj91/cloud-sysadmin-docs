@@ -1,0 +1,45 @@
+========= Not able to connect to VM after creating VM from snapshot ===========
+
+Issue:
+Not able to connect to VM after creating VM from snapshot
+
+OS:- Ubuntu 18.04 Canonical
+
+Observation:
+WAAgent Status: not ready
+EnableVMaccess Extension: unavailable
+walinuxagent service:- Up and running
+waagent version:- WALinuxAgent-2.2.40
+Serial Console: Accessible
+External connectivity: Error:Network timeout
+ping 8.8.8.8:- Network unreachable
+
+Troubleshooting:
+# systemctl status walinuxagent ---------- Running
+# systemctl status cloud-init ----------------- Failed
+
+Checked file /etc/resolv.conf ------------------ internal DNS nameserver (search) entry is missing 
+## Should be having following three entries
+nameserver 127.0.0.53
+options edns0
+search ve3ke0rfwgsejjyw5rf13ryezf.rx.internal.cloudapp.net
+
+Isolation:
+basically VM network connectivity is not available due to which external access is not available. This can occure if the MAC address in /etc	/netplan/50-cloud-init.yaml file does not match with, MAC address of NIC associated with VM created
+
+Resolution:
+copied the MAC address from VM --> NIC --> Properties and placed in /etc/50-cloud-init.yaml file
+Rebooted the VM.
+
+installed the waagent with latest version with
+# apt-get install walinuxagent
+check version    
+# waagent --version
+
+
+
+
+
+
+
+ 

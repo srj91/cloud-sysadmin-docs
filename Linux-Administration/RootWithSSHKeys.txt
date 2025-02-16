@@ -1,0 +1,19 @@
+
+====== Applying SSH keys authentication with Root User ======
+
+
+1. login to server and switch as root with
+	# sudo su -
+
+2. generate Private and Public SSH keys with following command and accept all default values except passphrase
+	# ssh-keygen
+
+3. Above command will generate id_rsa and id_rsa.pub files in ~/.ssh/ 
+
+4. take id_rsa file to your local machine using puttygen convert it to .PPK format usig puttygen tool
+
+5. also copy the conntent of file id_rsa.pub file to ~/.ssh/authorised_keys file 
+	# cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorised_keys
+
+6. Open file /etc/ssh/sshd_config file and uncomment following lines
+	 

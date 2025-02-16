@@ -1,0 +1,64 @@
+1) Prepare AWS Linux Box with the following.
+	a) Create one Sudo user.
+		#useradd username
+		#passwd username
+
+		#vi /etc/sudoers
+
+		Add the below line
+
+		username	ALL(ALL=ALL)	ALL
+
+	b) Enable SSH with Password Authentication
+		Modify the below file for authencate with password
+
+		#vi /etc/ssh/sshd_config
+
+		PasswordAuthentication yes
+
+2) Move the AWS Image to S3 Bucket
+3) Download moved AWS Image (VHD) to your onprem
+
+4) Convert downloaded VHD to Fixed VHD as it will be in dynamic VHD.
+
+5) Create Hyper-V machine with converted VHD and boot it in Hyper-V.
+
+6) Login to created Hyper-V machine with console and verify the IP Address to connect from SSH client app (Putty).
+
+7) Prepare the Hyper-V machine for Azure by performing the following.
+
+	a) #cp /etc/apt/sources.list /etc/apt/sources.list.bak
+	b) #sed -i 's/[a-z][a-z].archive.ubuntu.com/azure.archive.ubuntu.com/g' /etc/apt/sources.list
+	c) #apt-get update
+	d) #apt-get install linux-generic-hwe-16.04 linux-cloud-tools-generic-hwe-16.04
+	e) #reboot
+
+8) Once you rebooted successfully after installing above generic kernel for azure, remove AWS kernel package from machine by following.
+
+	a) #uname -r (this is let you know the current kernel version you have booted, if your kernel version is not generic then perform the following )
+	b) #apt-cache search kernel | grep (copy paste uname -r value here)
+	c) #apt-get remove Kernel-version-image and header
+
+9) Change Grub Value to receive logs and Serial console access on Azure.
+
+	#vi /etc/default/grub
+
+	Change the following line.
+
+	GRUB_CMDLINE_LINUX_DEFAULT="console=tty1 console=ttyS0,115200n8 earlyprintk=ttyS0,115200 rootdelay=300"
+
+	#update-grub
+
+10) Finally install WALinuxAgnet in Hyper-V machine for Azure.
+
+	#apt-get install walinuxagent
+	#systemctl enable walinuxagent
+
+
+11) Upload the prepared VHD to Azure and create a machine out of uploaded VHD.
+
+
+
+
+
+

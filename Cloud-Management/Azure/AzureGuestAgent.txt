@@ -1,0 +1,45 @@
+
+
+==================== Azure Guest Agent Links ==========
+#cd /tmp
+
+#wget https://github.com/Azure/WALinuxAgent/archive/v2.2.32.zip
+
+note: to update to other version, please use its link accordingly (reference: https://github.com/Azure/WALinuxAgent/releases)
+
+#unzip v2.2.32.zip
+
+#cd WALinuxAgent-2.2.32
+
+#python setup.py install
+
+#python -version
+
+Restart the waagent service:
+
+#service waagent restart
+
+
+verify the waagent version:
+
+#waagent --version
+
+ 
+the above command are from:
+
+https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/update-linux-agent
+
+under:
+
+Update the Linux Agent when no agent package exists for distribution
+
+=============================================================================================================================================
+
+https://github.com/Azure/WALinuxAgent/issues/1359
+https://github.com/Azure/WALinuxAgent/issues/1058
+https://github.com/Azure/WALinuxAgent/issues/1359
+https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/update-linux-agent
+https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/update-linux-agent
+https://github.com/Azure/WALinuxAgent/releases
+https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/update-linux-agent#update-the-linux-agent-when-no-agent-package-exists-for-distribution
+https://github.com/Azure/WALinuxAgent/wiki/Known-Issues#mitigate_agent_crash

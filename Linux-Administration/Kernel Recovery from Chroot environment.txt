@@ -1,0 +1,54 @@
+
+*********** Recovering the VM from Kernel Panic Error and installing the latest version *************
+										
+Create Disk from snapshot of Node-2						
+Attach it to rescue VM as datadisk and 						
+									
+mkdir /node2								
+mount /dev/sdc2 /node2    	// mount / partition							
+mount /dev/sdc1 /node2/boot	// mount boot partition						
+									
+cd /node2									
+mount -t proc proc proc		//						
+mount -t sysfs sys sys/		//					
+mount -o bind /dev dev/		// mount temprory file system					
+mount -o bind /dev/pts dev/pts/		//					
+									
+chroot .				// login to chroot environment					
+yum clean all								
+rm -rf /var/cache/yum 			// clear yum db cache
+cp -pr /node2/etc/yum.repos.d /var/tmp/ 		// copy node2 repos to tmp			
+cp -pr /etc/yum.repos.d/* /node2/etc/yum.repos.d/	// copy repositories from rescue VM to initial VM disk
+yum clean all
+yum repolist
+									
+rpm -qa | grep -i kernel 							
+									
+vim /etc/yum.conf			// comment exclude parameter if placed 		
+vim /etc/resolve.conf 		//make 8.8.8.8 entry	to connect to internet			
+									
+yum check-update | grep -i kernel   	//find updated kernel package			
+									
+yum clean all								
+yum install kernel-3.10.0-1127.19.1.el7.x86_64					
+									
+grub2-mkconfig -o /boot/grub2/grub.cfg	// Regenerate grub configuartion file to indentify and use new initramfs					
+du -sh /boot/initram*							
+									
+umount /node2/boot								
+umount -l /test								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

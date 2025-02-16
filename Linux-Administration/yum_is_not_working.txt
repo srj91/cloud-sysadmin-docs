@@ -1,0 +1,26 @@
+
+yum is not working
+
+issue:  installation and updation is not going with yum
+
+error:  failure: repodata/repomd.xml from rhui-rhel-7-server-dotnet-rhui-debug-rpms: [Errno 256] No more mirrors to try.
+	https://rhui-1.microsoft.com/pulp/repos//content/dist/rhel/rhui/server/7/7.4/x86_64/dotnet/1/debug/repodata/repomd.xml: [Errno 14] HTTPS Error 404 - Not Found
+	https://rhui-2.microsoft.com/pulp/repos//content/dist/rhel/rhui/server/7/7.4/x86_64/dotnet/1/debug/repodata/repomd.xml: [Errno 14] HTTPS Error 404 - Not Found
+	https://rhui-3.microsoft.com/pulp/repos//content/dist/rhel/rhui/server/7/7.4/x86_64/dotnet/1/debug/repodata/repomd.xml: [Errno 14] HTTPS Error 404 - Not Found
+
+root cause: 
+	1. currupted yum database.
+	2. wrong entries in /etc/resolv.conf.
+	3. try pinging and wget to other sites as well as gateway.
+	4. mis-splelled entries.
+
+
+resolution: 
+
+copied the /etc/yum.repos.d files from working machine to affected machine.
+cleared yum database.
+list down yum repolist.
+
+
+
+

@@ -1,0 +1,40 @@
+
+************************************* GRUB Rescue**************************************
+
+Issue: not able to connect to VM and serial console gives the error: Kernel needs to be loaded first or taking directly to initramfs 
+
+Steps Taken:
+1. created rescue VM and mounted the /partition on /rescue and boot partition on /rescue/boot/efi as 
+	# mount /dev/sdd1 /rescue
+	# mount /dev/sdd15 /rescue/boot/efi
+
+2. mounted the proc filesystem as 
+	# cd /rescue 
+	# mount -t proc proc proc 
+	# mount -t sysfs sys sys/
+	# mount -o bind /dev dev/
+	# mount -o bind /dev/pts dev/pts/
+	# mount -o bind /run run/
+
+3. logged in to chroot environment and installed the latest kernel package
+	# chroot /rescue
+	# apt-get update // this installed the kernel 5.4.0-1040-azure
+
+4. go into /boot/grub/grub.cfg file and modify the entry root=UUID=/device/name to root partition UUID and save the file
+
+5. regenerated the initramfs file for latest kernel
+	# update-initramfs -c -k 5.4.0-1040-azure
+
+6. Updated the grub configuration as 
+	# update-grub
+
+7. Unmounted the mounted filesystems and partitions
+	# umount /rescue/run
+	# umount /rescue/proc
+	# umount /rescue/sys
+	# umount /rescue/dev/pts
+	# umount /rescue/dev
+	# umount /rescue/boot/efi
+	# umount /rescue/
+
+8. remove the disk and swap it back to initial VM  	

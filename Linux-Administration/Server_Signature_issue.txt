@@ -1,0 +1,35 @@
+How to resolve the server signature issue..?
+
+
+Server Signature is an important piece of information about your server and operating system. 
+i.e. suppose, you are using an Apache server with Ubuntu operating system.
+The version number of Apache Server and Operating System information will be displayed in Server Signature.
+
+
+issue resolving process differs in every webserver...
+=============================================================================================================
+
+Apache server signature issue... you want to turn off server signature..
+follow..
+
+1. stop apache service
+
+   # systemctl stop httpd
+
+2. goto main apache configuration file of apache webserver.
+
+   # vim /etc/httpd/conf.d/httpd.conf
+
+
+3. at bottom append following lines
+
+   ServerSignature Off
+   ServerTokens Prod
+
+4. turn on apache service
+
+   # systemctl start httpd
+
+ 
+
+Imp Link  https://technumero.com/disable-server-signature-by-editing-htaccess-apache/

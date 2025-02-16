@@ -56,8 +56,8 @@ PROCEDURE stuck-sa-check:
                              "Task State: " + sas-task-01.state + "~n" +
                              "Scheduled Date: " + STRING(scheduled-date-time) + "~n" +
                              "Duration: " + STRING(in-progress-duration) + " minutes." + "~n".
-            RUN send-email(INPUT "noreply-apprise@aptean.com",
-                           INPUT "suraj.chopade@aptean.com",
+            RUN send-email(INPUT "noreply@example.com",
+                           INPUT "suraj.chopade@example.com",
                            INPUT "Alert: Stuck Task Detected (Task ID: " + STRING(sas-task-01.id) + ")",
                            INPUT "").
       END.
@@ -97,8 +97,8 @@ PROCEDURE stuck-sa-check:
                                 "Task ID: " + STRING(sas-task-01.id) + "~n" +
                                 "Task State: " + sas-task-01.state + "~n" +
                                 "Scheduled Date: " + STRING(scheduled-date-time) + "~n".
-            RUN send-email(INPUT "noreply-apprise@aptean.com",
-                           INPUT "suraj.chopade@aptean.com",
+            RUN send-email(INPUT "noreply@example.com",
+                           INPUT "suraj.chopade@example.com",
                            INPUT "Alert: Stuck Task Detected (Task ID: " + STRING(sas-task-01.id) + ")",
                            INPUT "").
          END.

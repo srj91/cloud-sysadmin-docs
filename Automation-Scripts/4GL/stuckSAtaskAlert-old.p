@@ -59,11 +59,11 @@ PROCEDURE send-email:
 
     ASSIGN 
         v-mail-server    = "smtp.office365.com"         /* Replace with your SMTP server */
-        v-from-address   = "noreply-apprise@aptean.com"    /* Replace with the sender's email */
-        v-recipient-email = "suraj.chopade@aptean.com" /* Replace with the recipient email */
+        v-from-address   = "noreply@example.com"    /* Replace with the sender's email */
+        v-recipient-email = "suraj.chopade@example.com" /* Replace with the recipient email */
         v-smtp-port      = 587                         /* Standard SMTP port */
-        v-username       = "noreply-apprise@aptean.com"  /* Replace with your SMTP username */
-        v-password       = "Winter@123".            /* Replace with your SMTP password */
+        v-username       = "noreply@example.com"  /* Replace with your SMTP username */
+        v-password       = "password".            /* Replace with your SMTP password */
 
     /* Sending the email */
     RUN mail-send 
